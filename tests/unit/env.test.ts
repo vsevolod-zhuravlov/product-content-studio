@@ -9,7 +9,10 @@ const validSource = {
 
 describe("parseEnv", () => {
   it("parses a valid environment", () => {
-    expect(parseEnv(validSource)).toEqual(validSource);
+    expect(parseEnv(validSource)).toEqual({
+      ...validSource,
+      AUTH_COOKIE_SECURE: false,
+    });
   });
 
   it("defaults NODE_ENV to development", () => {
@@ -19,6 +22,31 @@ describe("parseEnv", () => {
     };
 
     expect(parseEnv(withoutNodeEnv).NODE_ENV).toBe("development");
+  });
+
+  it.each([
+    ["true", true],
+    ["false", false],
+  ] as const)("parses AUTH_COOKIE_SECURE=%s", (value, expected) => {
+    expect(
+      parseEnv({ ...validSource, AUTH_COOKIE_SECURE: value })
+        .AUTH_COOKIE_SECURE,
+    ).toBe(expected);
+  });
+
+  it("defaults cookie security from NODE_ENV", () => {
+    expect(
+      parseEnv({ ...validSource, NODE_ENV: "production" }).AUTH_COOKIE_SECURE,
+    ).toBe(true);
+    expect(
+      parseEnv({ ...validSource, NODE_ENV: "development" }).AUTH_COOKIE_SECURE,
+    ).toBe(false);
+  });
+
+  it("rejects invalid AUTH_COOKIE_SECURE values", () => {
+    expect(() =>
+      parseEnv({ ...validSource, AUTH_COOKIE_SECURE: "yes" }),
+    ).toThrow(/AUTH_COOKIE_SECURE/);
   });
 
   it("reports a missing DATABASE_URL by name", () => {

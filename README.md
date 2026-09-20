@@ -1,34 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Product Content Studio
 
-## Getting Started
-
-First, run the development server:
+## Run from a clean clone
 
 ```bash
+npm ci
+cp .env.example .env
+# Set JWT_SECRET (32+ characters), ADMIN_EMAIL, and ADMIN_PASSWORD in .env.
+docker compose up -d db
+npm run db:deploy
+npm run db:seed
+npm test
+npm run lint
+npm run typecheck
+npm run build
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The admin login is at
+`/admin/login`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Integration tests use `TEST_DATABASE_URL`. Its database name must end in
+`_test`; the test setup creates it and deploys migrations automatically.
 
-## Learn More
+## Authentication configuration
 
-To learn more about Next.js, take a look at the following resources:
+Sessions are HS256 JWTs in an `HttpOnly`, `SameSite=Lax` cookie and expire after
+eight hours. Set `AUTH_COOKIE_SECURE=false` only when the application is served
+over plain HTTP, such as a production build on local Docker Compose. When the
+variable is omitted, secure cookies default to enabled only for
+`NODE_ENV=production`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Known limitations
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Sessions are stateless. Logout clears the browser cookie but does not revoke a
+  copied token before its expiry.
+- Login rate limiting is not implemented yet.
+- Registration, password reset, and roles are outside the current scope.

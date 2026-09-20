@@ -1,19 +1,28 @@
 import "server-only";
 import { z } from "zod";
 
-const envSchema = z.object({
-  DATABASE_URL: z.string().refine(isPostgresUrl, {
-    error: "має бути коректною URL-адресою PostgreSQL",
-  }),
-  JWT_SECRET: z.string().min(32, {
-    error: "має містити щонайменше 32 символи",
-  }),
-  NODE_ENV: z
-    .enum(["development", "test", "production"])
-    .default("development"),
-});
+const envSchema = z
+  .object({
+    DATABASE_URL: z.string().refine(isPostgresUrl, {
+      error: "має бути коректною URL-адресою PostgreSQL",
+    }),
+    JWT_SECRET: z.string().min(32, {
+      error: "має містити щонайменше 32 символи",
+    }),
+    NODE_ENV: z
+      .enum(["development", "test", "production"])
+      .default("development"),
+    AUTH_COOKIE_SECURE: z.enum(["true", "false"]).optional(),
+  })
+  .transform(({ AUTH_COOKIE_SECURE, ...env }) => ({
+    ...env,
+    AUTH_COOKIE_SECURE:
+      AUTH_COOKIE_SECURE === undefined
+        ? env.NODE_ENV === "production"
+        : AUTH_COOKIE_SECURE === "true",
+  }));
 
-type Env = z.infer<typeof envSchema>;
+export type Env = z.infer<typeof envSchema>;
 
 function isPostgresUrl(value: string): boolean {
   try {
