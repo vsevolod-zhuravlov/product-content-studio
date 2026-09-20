@@ -5,3 +5,8 @@ build
 coverage
 package-lock.json
 src/generated
+playwright-report
+test-results
+blob-report
+e2e/.auth
+.tmp-screens

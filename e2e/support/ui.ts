@@ -1,0 +1,75 @@
+export const AUTH_COOKIE_NAME = "pcs_session";
+
+export const PUBLISHED_SLUG = "halo-hub";
+
+/** Requirement limits — keep independent of the app schema so a raised max fails E2E. */
+export const FIELD_LIMITS = {
+  description: 1000,
+  seoTitle: 60,
+  seoDescription: 160,
+} as const;
+
+export const ui = {
+  loginTitle: "Вхід до адмін-панелі",
+  email: "Електронна пошта",
+  password: "Пароль",
+  login: "Увійти",
+  invalidCredentials: "Невірна пошта або пароль",
+  emailInvalid: "Введіть коректну пошту",
+  required: "Обов'язкове поле",
+  showPassword: "Показати пароль",
+  hidePassword: "Приховати пароль",
+  logout: "Вийти",
+  userMenu: (email: string) => `Меню користувача ${email}`,
+  productsHeading: "Товари",
+  editProduct: (name: string) => `Редагувати товар «${name}»`,
+  published: "Опубліковано",
+  draft: "Чернетка",
+  readOnlyHint: "Назву й характеристики не можна змінити",
+  productNameLabel: "Назва товару",
+  specsLabel: "Характеристики",
+  save: "Зберегти зміни",
+  cancel: "Скасувати",
+  savedToast: "Зміни збережено",
+  saving: "Збереження…",
+  unsaved: "Є незбережені зміни",
+  saveFailed: "Не вдалося зберегти",
+  saveFailedBody:
+    "Не вдалося зберегти. Ваші правки збережено у формі — спробуйте ще раз",
+  retry: "Спробувати ще раз",
+  sessionExpired: "Сесія закінчилась",
+  signInAgain: "Увійти знову",
+  validationBanner: "Сервер відхилив дані",
+  checkFields: "Перевірте виділені поля",
+  statusHint: "Зміна статусу набуде чинності після збереження.",
+  publicationStatus: "Статус публікації",
+  description: "Опис",
+  seoTitle: "SEO-заголовок",
+  seoDescription: "SEO-опис",
+  catalog: "Каталог",
+  related: "Інші товари",
+  backToCatalog: "Назад до каталогу",
+  productNotFound: "Товар не знайдено",
+  publicNotFoundHint: "Можливо, його не існує або він тимчасово недоступний",
+  adminNotFoundHint: "Цього товару немає в каталозі або його вже видалили.",
+  backToProducts: "Назад до товарів",
+  toProductList: "До списку товарів",
+  cancelChangesTitle: "Скасувати зміни?",
+  cancelChangesConfirm: "Скасувати зміни",
+  continueEditing: "Продовжити редагування",
+  maxLength: (limit: number) => `Максимум ${limit} символів`,
+  counter: (count: number, limit: number) => `${count} / ${limit}`,
+} as const;
+
+export const urls = {
+  login: "/admin/login",
+  products: "/admin/products",
+  product: (id: string) => `/admin/products/${id}`,
+  catalog: "/",
+  publicProduct: (slug: string) => `/products/${slug}`,
+  adminProductsApi: "/api/admin/products",
+  adminProductApi: (id: string) => `/api/admin/products/${id}`,
+  publicProductsApi: "/api/public/products",
+  publicProductApi: (slug: string) => `/api/public/products/${slug}`,
+  loginApi: "/api/auth/login",
+} as const;

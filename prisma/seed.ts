@@ -54,7 +54,7 @@ const products: SeedProduct[] = [
     slug: "nimbus-s3",
     name: "Смартгодинник Nimbus S3",
     specs: [
-      { label: "Екран", value: "1.43\" AMOLED" },
+      { label: "Екран", value: '1.43" AMOLED' },
       { label: "Автономність", value: "до 10 днів" },
       { label: "Водозахист", value: "5 ATM" },
       { label: "Датчики", value: "пульс, SpO2, GPS" },
@@ -214,16 +214,16 @@ const products: SeedProduct[] = [
     slug: "nova-lift",
     name: "Підставка для ноутбука Nova Lift",
     specs: [
-      { label: "Діагональ", value: "11–16\"" },
+      { label: "Діагональ", value: '11–16"' },
       { label: "Кут нахилу", value: "15–45°" },
       { label: "Матеріал", value: "алюміній" },
       { label: "Вага", value: "890 г" },
     ],
     description:
       "Алюмінієва підставка піднімає екран ноутбука 11–16 дюймів ближче до рівня очей і зменшує нахил шиї. Кут регулюється від 15 до 45 градусів, а відкритий каркас покращує вентиляцію корпуса.\n\nВага 890 г дозволяє брати підставку в офіс або кав’ярню. Гумові накладки утримують ноутбук і не дряпають стіл.",
-    seoTitle: "Підставка Nova Lift — алюміній, 11–16\"",
+    seoTitle: 'Підставка Nova Lift — алюміній, 11–16"',
     seoDescription:
-      "Алюмінієва підставка Nova Lift для ноутбуків 11–16\" з регульованим кутом нахилу та вагою 890 г.",
+      'Алюмінієва підставка Nova Lift для ноутбуків 11–16" з регульованим кутом нахилу та вагою 890 г.',
     status: ProductStatus.DRAFT,
   },
   {
@@ -247,15 +247,15 @@ const products: SeedProduct[] = [
     name: "Міський рюкзак Atlas Pack",
     specs: [
       { label: "Об'єм", value: "22 л" },
-      { label: "Відсік для ноутбука", value: "16\"" },
+      { label: "Відсік для ноутбука", value: '16"' },
       { label: "Матеріал", value: "водовідштовхувальний нейлон" },
       { label: "Вага", value: "780 г" },
     ],
     description:
       "Об’єм 22 літри вміщує ноутбук до 16 дюймів, зарядні кабелі та змінний одяг для міського дня. Водовідштовхувальний нейлон захищає речі від короткого дощу, а м’які лямки не тиснуть на плечі.\n\nОкремий задній відсік відкривається ближче до спини, щоб дістати техніку в транспорті. Вага порожнього рюкзака — 780 г, тож він не додає зайвого навантаження.",
-    seoTitle: "Рюкзак Atlas Pack — 22 л, відділ 16\"",
+    seoTitle: 'Рюкзак Atlas Pack — 22 л, відділ 16"',
     seoDescription:
-      "Міський рюкзак Atlas Pack на 22 л з відділом для ноутбука 16\", водостійким нейлоном і вагою 780 г.",
+      'Міський рюкзак Atlas Pack на 22 л з відділом для ноутбука 16", водостійким нейлоном і вагою 780 г.',
     status: ProductStatus.DRAFT,
   },
 ];
@@ -343,9 +343,21 @@ function assertProductsAreValid(seedProducts: SeedProduct[]) {
   }
 }
 
-async function main() {
-  const connectionString = process.env.DATABASE_URL;
+export const seedProducts = products;
 
+let cachedPasswordHash: { password: string; hash: string } | undefined;
+
+async function passwordHashFor(password: string): Promise<string> {
+  if (cachedPasswordHash?.password === password) {
+    return cachedPasswordHash.hash;
+  }
+
+  const passwordHash = await hash(password, 12);
+  cachedPasswordHash = { password, hash: passwordHash };
+  return passwordHash;
+}
+
+export async function seedDatabase(connectionString: string): Promise<void> {
   if (!connectionString) {
     throw new Error("DATABASE_URL is required to seed the database.");
   }
@@ -357,7 +369,7 @@ async function main() {
   const prisma = new PrismaClient({ adapter });
 
   try {
-    const passwordHash = await hash(password, 12);
+    const passwordHash = await passwordHashFor(password);
 
     await prisma.user.upsert({
       where: { email },
@@ -379,9 +391,20 @@ async function main() {
   }
 }
 
-main().catch((error: unknown) => {
-  console.error(
-    error instanceof Error ? error.message : "Database seed failed.",
-  );
-  process.exitCode = 1;
-});
+function isExecutedAsScript(): boolean {
+  const entry = process.argv[1];
+  if (!entry) {
+    return false;
+  }
+
+  return entry.replaceAll("\\", "/").endsWith("prisma/seed.ts");
+}
+
+if (isExecutedAsScript()) {
+  seedDatabase(process.env.DATABASE_URL ?? "").catch((error: unknown) => {
+    console.error(
+      error instanceof Error ? error.message : "Database seed failed.",
+    );
+    process.exitCode = 1;
+  });
+}

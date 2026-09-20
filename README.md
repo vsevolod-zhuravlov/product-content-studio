@@ -22,6 +22,41 @@ Open [http://localhost:3000](http://localhost:3000). The admin login is at
 Integration tests use `TEST_DATABASE_URL`. Its database name must end in
 `_test`; the test setup creates it and deploys migrations automatically.
 
+## E2E tests
+
+Playwright covers the gaps Vitest cannot: a real browser, HttpOnly cookies and
+redirects, server-rendered HTML, public-page freshness after publish/unpublish,
+stored XSS, the editor's failed-save UI, and 375px vs 1280px layout. Schema
+matrices, bcrypt, and JWT internals stay in Vitest. `npm test` does not run
+Playwright.
+
+Chromium is the only browser. Cookie, redirect, cache, and layout checks here
+do not need Firefox or WebKit.
+
+Install the browser once (this step needs network). Later runs are local:
+
+```bash
+npm run e2e:install
+npm run test:e2e
+```
+
+The suite builds a production-like app (`next build` then `next start` on port
+3100) against a dedicated database. Locally it reuses that server if it is
+already up. Admin login uses `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the
+environment (the same placeholders as `.env.example`).
+
+The E2E database is not `TEST_DATABASE_URL`. From that URL the name
+`…_test` is rewritten to `…_e2e_test` (or set `E2E_DATABASE_URL` yourself).
+The name must still end in `_test`, or setup refuses to run. Mutating specs
+truncate and re-seed that database in `beforeEach`.
+
+`workers` is `1` and `fullyParallel` is `false` because every test shares that
+one database. Parallel workers would race on truncates and product rows.
+
+Intentionally not covered: Firefox/WebKit, visual regression screenshots (R5;
+brittle across fonts and CI), restart persistence of the production server, and
+anything Vitest already asserts in-process.
+
 ## Authentication configuration
 
 Sessions are HS256 JWTs in an `HttpOnly`, `SameSite=Lax` cookie and expire after
