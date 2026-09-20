@@ -13,6 +13,7 @@ import { signSession, verifySessionToken } from "@/lib/auth/jwt";
 import { db } from "@/lib/db";
 import { handleProxyRequest } from "@/proxy";
 import { buildUser } from "../../factories/user";
+import { tamperJwt } from "../../helpers/tamper-jwt";
 import { resetDb } from "../../helpers/database";
 
 const bcryptCompare = vi.hoisted(() => vi.fn());
@@ -259,7 +260,7 @@ describe("GET /api/admin/me direct guard", () => {
 
   it("rejects tampered and alg-none tokens", async () => {
     const signed = await signSession({ sub: "user-1", email: "a@b.com" });
-    const tampered = `${signed.slice(0, -1)}A`;
+    const tampered = tamperJwt(signed);
     const header = Buffer.from(JSON.stringify({ alg: "none" })).toString(
       "base64url",
     );
@@ -322,7 +323,7 @@ describe("admin proxy", () => {
       { expiresAt: "0s" },
     );
     const valid = await signSession({ sub: "user-1", email: "a@b.com" });
-    const tampered = `${valid.slice(0, -1)}A`;
+    const tampered = tamperJwt(valid);
 
     expect(
       (await handleProxyRequest(withCookie("/admin/products", expired))).status,

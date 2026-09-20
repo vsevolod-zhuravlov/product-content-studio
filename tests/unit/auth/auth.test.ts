@@ -1,6 +1,7 @@
 import { SignJWT } from "jose";
 import { NextRequest } from "next/server";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
+import { decodeJwtSignature, tamperJwt } from "../../helpers/tamper-jwt";
 import {
   AUTH_COOKIE_NAME,
   SESSION_AUDIENCE,
@@ -23,9 +24,11 @@ import { loginSchema } from "@/lib/validation/auth";
 
 const secret = "unit-test-jwt-secret-that-is-at-least-32-characters";
 
-process.env.DATABASE_URL =
-  "postgresql://postgres:postgres@localhost:5432/unit_test";
-process.env.JWT_SECRET = secret;
+beforeAll(() => {
+  process.env.DATABASE_URL =
+    "postgresql://postgres:postgres@localhost:5432/unit_test";
+  process.env.JWT_SECRET = secret;
+});
 
 async function customToken(
   payload: Record<string, unknown>,
@@ -110,11 +113,29 @@ describe("JWT sessions", () => {
   it("rejects tampered payloads and signatures", async () => {
     const token = await signSession({ sub: "user-1", email: "a@b.com" });
     const [header, payload, signature] = token.split(".");
-    const tamperedPayload = `${header}.${payload?.slice(0, -1)}A.${signature}`;
-    const tamperedSignature = `${header}.${payload}.${signature?.slice(0, -1)}A`;
+    const originalPayload = payload ?? "";
+    const payloadIndex = Math.floor(originalPayload.length / 2);
+    const replacement = originalPayload[payloadIndex] === "A" ? "B" : "A";
+    const tamperedPayload = `${header}.${originalPayload.slice(0, payloadIndex)}${replacement}${originalPayload.slice(payloadIndex + 1)}.${signature}`;
 
     await expect(verifySessionToken(tamperedPayload)).resolves.toBeNull();
-    await expect(verifySessionToken(tamperedSignature)).resolves.toBeNull();
+    await expect(verifySessionToken(tamperJwt(token))).resolves.toBeNull();
+  });
+
+  it("changes decoded signature bytes for 500 freshly signed tokens", async () => {
+    for (let index = 0; index < 500; index += 1) {
+      const token = await signSession({
+        sub: `user-${index}`,
+        email: `user-${index}@example.com`,
+      });
+      const tampered = tamperJwt(token);
+
+      expect(tampered).not.toBe(token);
+      expect(
+        decodeJwtSignature(tampered).equals(decodeJwtSignature(token)),
+      ).toBe(false);
+      await expect(verifySessionToken(tampered)).resolves.toBeNull();
+    }
   });
 
   it("rejects alg none", async () => {

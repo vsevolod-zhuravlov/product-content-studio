@@ -6,6 +6,7 @@ import {
   SESSION_ISSUER,
 } from "@/lib/auth/constants";
 import { signSession } from "@/lib/auth/jwt";
+import { tamperJwt } from "./tamper-jwt";
 
 export const API_BASE_URL = "http://localhost:3000";
 
@@ -69,7 +70,6 @@ export async function invalidAdminTokens(): Promise<
   Array<[name: string, token: string | undefined]>
 > {
   const valid = await validAdminToken();
-  const replacement = valid.endsWith("A") ? "B" : "A";
 
   return [
     ["no cookie", undefined],
@@ -80,7 +80,7 @@ export async function invalidAdminTokens(): Promise<
         { expiresAt: "0s" },
       ),
     ],
-    ["tampered token", `${valid.slice(0, -1)}${replacement}`],
+    ["tampered token", tamperJwt(valid)],
     [
       "wrong-secret token",
       await customToken(

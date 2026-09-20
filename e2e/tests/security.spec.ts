@@ -1,4 +1,5 @@
 import { AUTH_COOKIE_NAME, FIELD_LIMITS, ui, urls } from "../support/ui";
+import { tamperJwt } from "../../tests/helpers/tamper-jwt";
 import { adminGet, adminPut, objectKeys, readJson } from "../support/api";
 import { findPublishedProduct, getProductById } from "../support/db";
 import {
@@ -161,8 +162,7 @@ test.describe("Security", () => {
     const cookies = await context.cookies();
     const session = cookies.find((cookie) => cookie.name === AUTH_COOKIE_NAME);
     expect(session).toBeDefined();
-    const last = session!.value.at(-1) ?? "A";
-    const tampered = `${session!.value.slice(0, -1)}${last === "A" ? "B" : "A"}`;
+    const tampered = tamperJwt(session!.value);
 
     await context.clearCookies();
     await context.addCookies([
