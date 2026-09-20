@@ -4,22 +4,11 @@ import {
   ProductStatus,
   type Product,
 } from "@/generated/prisma/client";
+import type { PublicProduct } from "@/lib/api-types";
 import { db } from "@/lib/db";
-import {
-  productEditSchema,
-  specsSchema,
-  type ProductSpec,
-} from "@/lib/validation/product";
+import { productEditSchema } from "@/lib/validation/product";
 import { NotFoundError, ValidationError } from "@/server/errors";
-
-export type PublicProduct = {
-  slug: string;
-  name: string;
-  specs: ProductSpec[];
-  description: string;
-  seoTitle: string;
-  seoDescription: string;
-};
+import { toPublicProduct } from "./product.dto";
 
 const publicProductSelect = {
   slug: true,
@@ -29,15 +18,6 @@ const publicProductSelect = {
   seoTitle: true,
   seoDescription: true,
 } as const;
-
-type PublicProductRow = Omit<PublicProduct, "specs"> & { specs: unknown };
-
-function toPublicProduct(product: PublicProductRow): PublicProduct {
-  return {
-    ...product,
-    specs: specsSchema.parse(product.specs),
-  };
-}
 
 export async function listPublishedProducts(): Promise<PublicProduct[]> {
   const products = await db.product.findMany({
@@ -91,15 +71,7 @@ export async function updateProduct(
   const validation = productEditSchema.safeParse(input);
 
   if (!validation.success) {
-    const { fieldErrors } = z.flattenError(validation.error);
-    throw new ValidationError(
-      Object.fromEntries(
-        Object.entries(fieldErrors).map(([field, errors]) => [
-          field,
-          errors ?? [],
-        ]),
-      ),
-    );
+    throw new ValidationError(toFieldErrors(validation.error));
   }
 
   try {
@@ -114,6 +86,25 @@ export async function updateProduct(
 
     throw error;
   }
+}
+
+function toFieldErrors(error: z.ZodError): Record<string, string[]> {
+  const normalized: Record<string, string[]> = {};
+
+  for (const issue of error.issues) {
+    if (issue.code === "unrecognized_keys") {
+      for (const key of issue.keys) {
+        normalized[key] = [issue.message];
+      }
+      continue;
+    }
+
+    const field =
+      typeof issue.path[0] === "string" ? issue.path[0] : "_root";
+    normalized[field] = [...(normalized[field] ?? []), issue.message];
+  }
+
+  return normalized;
 }
 
 function isRecordNotFoundError(error: unknown): boolean {
