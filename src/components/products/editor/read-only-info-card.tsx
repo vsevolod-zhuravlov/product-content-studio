@@ -15,13 +15,13 @@ type ReadOnlyInfoCardProps = {
 export function ReadOnlyInfoCard({ product }: ReadOnlyInfoCardProps) {
   return (
     <Card className="bg-card shadow-sm ring-border">
-      <CardHeader className="flex flex-row items-start justify-between gap-3">
+      <CardHeader>
         <CardTitle className="flex items-center gap-2 font-semibold">
-          <Info className="size-4 text-primary" aria-hidden="true" />
+          <Info className="size-4 shrink-0 text-primary" aria-hidden="true" />
           Основна інформація
         </CardTitle>
-        <p className="flex items-center gap-1.5 text-right text-xs text-muted-foreground">
-          <Lock className="size-3.5" aria-hidden="true" />
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Lock className="size-3.5 shrink-0" aria-hidden="true" />
           Назву й характеристики не можна змінити
         </p>
       </CardHeader>

@@ -16,7 +16,7 @@ export function ProductDetail({ product, related = [] }: ProductDetailProps) {
       <article>
         <BackLink name={product.name} />
         <div className="flex flex-col gap-6 sm:flex-row sm:items-stretch">
-          <div className="aspect-[3/4] w-full shrink-0 overflow-hidden rounded-2xl border bg-card shadow-public sm:aspect-auto sm:w-72 sm:self-stretch lg:w-80">
+          <div className="aspect-[16/10] w-full shrink-0 overflow-hidden rounded-2xl border bg-card shadow-public sm:aspect-auto sm:w-72 sm:self-stretch lg:w-80">
             <ProductCover slug={product.slug} size="split" />
           </div>
           <div className="min-w-0 flex-1">

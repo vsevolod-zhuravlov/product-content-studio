@@ -43,14 +43,14 @@ export function EditorHeader({
                 { label: name },
               ]}
             />
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-col items-start gap-1.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
               <h1
-                className="truncate text-lg font-semibold tracking-tight sm:text-xl"
+                className="max-w-full text-lg font-semibold tracking-tight break-words sm:truncate sm:text-xl"
                 title={name}
               >
                 {name}
               </h1>
-              <StatusBadge status={savedStatus} />
+              <StatusBadge status={savedStatus} className="shrink-0" />
             </div>
             <SaveStatusIndicator status={saveStatus} />
           </div>
