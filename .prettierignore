@@ -1,10 +1,15 @@
+# dependencies and build output
 node_modules
 .next
 out
 build
 coverage
 package-lock.json
+
+# generated Prisma client
 src/generated
+
+# test artifacts
 playwright-report
 test-results
 blob-report
