@@ -1,5 +1,4 @@
 import { AppLogo } from "./app-logo";
-import { NavLink } from "./nav-link";
 import { UserMenu } from "./user-menu";
 
 type AdminHeaderProps = {
