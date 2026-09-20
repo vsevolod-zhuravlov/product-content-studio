@@ -20,7 +20,7 @@ export function AppLogo({ href = "/admin/products", className }: AppLogoProps) {
       <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
         <Package className="size-4" aria-hidden="true" />
       </span>
-      <span className="hidden sm:inline">Product Content Studio</span>
+      <span className="text-xl font-bold hidden sm:inline">Product Content Studio</span>
     </GuardedLink>
   );
 }
