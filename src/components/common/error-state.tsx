@@ -1,7 +1,7 @@
 "use client";
 
 import { CircleAlert, RotateCcw } from "lucide-react";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 type ErrorStateProps = {

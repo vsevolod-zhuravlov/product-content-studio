@@ -1,5 +1,5 @@
 import { Package } from "lucide-react";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { GuardedLink } from "@/components/common/guarded-link";
 
 type AppLogoProps = {

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { PackageOpen } from "lucide-react";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 
 type EmptyStateProps = {
   title: string;

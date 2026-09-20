@@ -1,4 +1,4 @@
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import type { ProductStatus } from "@/lib/api-types";
 
 const statusDetails: Record<
