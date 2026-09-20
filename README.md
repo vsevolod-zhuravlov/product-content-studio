@@ -38,6 +38,9 @@ PORT=3001 npm run dev
 `TEST_DATABASE_URL`. Its database name must end in `_test`; the test setup
 creates it and deploys migrations automatically.
 
+`npm run typecheck` runs `next typegen` first, so it succeeds on a clean
+clone before `npm run build`.
+
 ## E2E tests
 
 Playwright covers the gaps Vitest cannot: a real browser, HttpOnly cookies and
