@@ -13,6 +13,11 @@ export default defineConfig({
   test: {
     environment: "node",
     exclude: ["e2e/**", "**/node_modules/**", "**/.next/**"],
+    coverage: {
+      provider: "v8",
+      include: ["src/**"],
+      exclude: ["src/generated/**"],
+    },
     projects: [
       {
         extends: true,
