@@ -8,6 +8,11 @@ export default defineConfig({
     seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    url: env("DATABASE_URL"),
+    // `prisma generate` (postinstall) must not require .env; migrate/seed still do.
+    url:
+      process.env.DATABASE_URL ??
+      (process.argv.includes("generate")
+        ? "postgresql://postgres:postgres@127.0.0.1:1/prisma_generate"
+        : env("DATABASE_URL")),
   },
 });

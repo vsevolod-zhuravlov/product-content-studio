@@ -2,10 +2,16 @@
 
 ## Run from a clean clone
 
+Create `.env` **before** `npm ci`. Prisma runs `generate` in `postinstall` and
+reads `DATABASE_URL` from the environment (a dummy URL is used only for
+`prisma generate` when the variable is still unset).
+
 ```bash
-npm ci
 cp .env.example .env
 # Set JWT_SECRET (32+ characters), ADMIN_EMAIL, and ADMIN_PASSWORD in .env.
+# If host port 5432 is occupied, set POSTGRES_PORT to a free port (e.g. 55432)
+# and use that same host port in DATABASE_URL and TEST_DATABASE_URL.
+npm ci
 docker compose up -d db
 npm run db:deploy
 npm run db:seed
@@ -19,8 +25,18 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000). The admin login is at
 `/admin/login`.
 
-Integration tests use `TEST_DATABASE_URL`. Its database name must end in
-`_test`; the test setup creates it and deploys migrations automatically.
+If port 3000 is already in use:
+
+```bash
+PORT=3001 npm run dev
+# or: npx next dev -p 3001
+# After build: PORT=3001 npm start   or   npx next start -p 3001
+```
+
+`docker compose` reads `POSTGRES_PORT` from `.env`. `DATABASE_URL` and
+`TEST_DATABASE_URL` must use that same host port. Integration tests use
+`TEST_DATABASE_URL`. Its database name must end in `_test`; the test setup
+creates it and deploys migrations automatically.
 
 ## E2E tests
 
