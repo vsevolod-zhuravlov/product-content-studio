@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main>
-      <div>Hello world!</div>
+      <h1>Product Content Studio</h1>
     </main>
   );
 }
