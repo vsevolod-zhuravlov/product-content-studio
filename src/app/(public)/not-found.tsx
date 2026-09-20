@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PublicNotFound() {
   return (
-    <PublicContainer size="product">
+    <PublicContainer>
       <NotFoundState />
     </PublicContainer>
   );

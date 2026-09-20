@@ -5,10 +5,10 @@ export function PublicFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto border-t bg-background/80">
-      <PublicContainer className="py-6">
-        <p className="text-center text-sm text-muted-foreground">
-          © {year} {SITE_NAME}
+    <footer className="mt-auto bg-black text-white">
+      <PublicContainer className="p-6">
+        <p className="text-center text-sm text-white">
+          © {year} {SITE_NAME} All rights reserved.
         </p>
       </PublicContainer>
     </footer>

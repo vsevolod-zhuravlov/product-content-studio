@@ -6,7 +6,7 @@ type ProductsCountProps = {
 
 export function ProductsCount({ count }: ProductsCountProps) {
   return (
-    <span className="inline-flex rounded-full bg-secondary px-2.5 py-1 text-sm font-medium text-secondary-foreground">
+    <span className="w-fit text-sm font-medium text-primary">
       {formatProductCount(count)}
     </span>
   );

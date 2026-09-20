@@ -11,7 +11,13 @@ export default function PublicError({
 }) {
   return (
     <PublicContainer>
-      <ErrorState title="Не вдалося завантажити каталог" onRetry={retry} />
+      <ErrorState
+        title="Не вдалося завантажити каталог"
+        onRetry={retry}
+        retryVariant="default"
+        className="rounded-2xl shadow-public"
+        iconClassName="size-14 rounded-2xl bg-gradient-to-br from-destructive/15 to-secondary text-destructive"
+      />
     </PublicContainer>
   );
 }

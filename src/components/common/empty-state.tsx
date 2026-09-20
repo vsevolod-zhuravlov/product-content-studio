@@ -7,6 +7,7 @@ type EmptyStateProps = {
   description?: string;
   action?: ReactNode;
   icon?: ReactNode;
+  iconClassName?: string;
   className?: string;
 };
 
@@ -15,6 +16,7 @@ export function EmptyState({
   description,
   action,
   icon,
+  iconClassName,
   className,
 }: EmptyStateProps) {
   return (
@@ -25,7 +27,10 @@ export function EmptyState({
       )}
     >
       <div
-        className="mb-4 flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground"
+        className={cn(
+          "mb-4 flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground",
+          iconClassName,
+        )}
         aria-hidden="true"
       >
         {icon ?? <PackageOpen className="size-5" />}

@@ -1,6 +1,12 @@
+import { SlidersHorizontal } from "lucide-react";
 import type { PublicProduct } from "@/lib/api-types";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SpecRow } from "./spec-row";
+import { SpecsList } from "@/components/products/editor/specs-list";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 type SpecsCardProps = {
   specs: PublicProduct["specs"];
@@ -14,18 +20,13 @@ export function SpecsCard({ specs }: SpecsCardProps) {
   return (
     <Card className="bg-card shadow-sm ring-border">
       <CardHeader>
-        <h2 className="font-heading text-base font-semibold">Характеристики</h2>
+        <CardTitle className="flex items-center gap-2 font-semibold">
+          <SlidersHorizontal className="size-4 text-primary" aria-hidden="true" />
+          Характеристики
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <dl className="divide-y">
-          {specs.map((spec, index) => (
-            <SpecRow
-              key={`${index}-${spec.label}`}
-              label={spec.label}
-              value={spec.value}
-            />
-          ))}
-        </dl>
+        <SpecsList specs={specs} />
       </CardContent>
     </Card>
   );

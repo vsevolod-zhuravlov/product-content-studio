@@ -54,10 +54,13 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --shadow-public: var(--public-shadow);
+  --shadow-public-hover: var(--public-shadow-hover);
+  --animate-public-enter: public-enter 300ms ease-out both;
 }
 
 :root {
-  --background: oklch(0.975 0.012 285);
+  --background: oklch(1 0 0);
   --foreground: oklch(0.24 0.025 278);
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
@@ -86,7 +89,12 @@
   --status-published-foreground: oklch(0.39 0.12 151);
   --status-draft: oklch(0.95 0.07 84);
   --status-draft-foreground: oklch(0.48 0.12 66);
-  --dot-pattern: oklch(0.78 0.045 282 / 35%);
+  --public-shadow:
+    0 1px 2px oklch(0.32 0.05 277 / 4%),
+    0 12px 32px -12px oklch(0.32 0.08 277 / 14%);
+  --public-shadow-hover:
+    0 2px 6px oklch(0.32 0.05 277 / 6%),
+    0 18px 40px -14px oklch(0.32 0.1 277 / 22%);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -109,14 +117,19 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
-    background-image: radial-gradient(
-      circle,
-      var(--dot-pattern) 1px,
-      transparent 1px
-    );
-    background-size: 20px 20px;
   }
   html {
     @apply font-sans;
+  }
+}
+
+@keyframes public-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

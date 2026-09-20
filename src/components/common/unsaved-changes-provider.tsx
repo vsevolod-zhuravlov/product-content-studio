@@ -106,8 +106,12 @@ export function UnsavedChangesProvider({ children }: { children: ReactNode }) {
   );
 }
 
+export function useOptionalUnsavedChanges() {
+  return useContext(UnsavedChangesContext);
+}
+
 export function useUnsavedChanges() {
-  const context = useContext(UnsavedChangesContext);
+  const context = useOptionalUnsavedChanges();
   if (!context) {
     throw new Error(
       "useUnsavedChanges must be used within UnsavedChangesProvider",

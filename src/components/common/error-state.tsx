@@ -8,6 +8,8 @@ type ErrorStateProps = {
   title?: string;
   description?: string;
   onRetry?: () => void;
+  retryVariant?: "outline" | "default";
+  iconClassName?: string;
   className?: string;
 };
 
@@ -15,6 +17,8 @@ export function ErrorState({
   title = "Не вдалося завантажити дані",
   description = "Спробуйте ще раз.",
   onRetry,
+  retryVariant = "outline",
+  iconClassName,
   className,
 }: ErrorStateProps) {
   return (
@@ -25,7 +29,12 @@ export function ErrorState({
         className,
       )}
     >
-      <div className="mb-4 flex size-11 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+      <div
+        className={cn(
+          "mb-4 flex size-11 items-center justify-center rounded-full bg-destructive/10 text-destructive",
+          iconClassName,
+        )}
+      >
         <CircleAlert className="size-5" aria-hidden="true" />
       </div>
       <h2 className="text-base font-semibold">{title}</h2>
@@ -33,7 +42,7 @@ export function ErrorState({
         {description}
       </p>
       {onRetry ? (
-        <Button className="mt-5" variant="outline" onClick={onRetry}>
+        <Button className="mt-5" variant={retryVariant} onClick={onRetry}>
           <RotateCcw aria-hidden="true" />
           Спробувати ще раз
         </Button>

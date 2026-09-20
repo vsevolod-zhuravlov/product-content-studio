@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useUnsavedChanges } from "./unsaved-changes-provider";
+import { useOptionalUnsavedChanges } from "./unsaved-changes-provider";
 
 type GuardedLinkProps = Omit<React.ComponentProps<typeof Link>, "href"> & {
   href: string;
@@ -16,7 +16,9 @@ export function GuardedLink({
   ...props
 }: GuardedLinkProps) {
   const router = useRouter();
-  const { isDirty, requestLeave } = useUnsavedChanges();
+  const unsaved = useOptionalUnsavedChanges();
+  const isDirty = unsaved?.isDirty ?? false;
+  const requestLeave = unsaved?.requestLeave;
 
   return (
     <Link
@@ -28,7 +30,7 @@ export function GuardedLink({
         if (!isDirty) return;
 
         event.preventDefault();
-        requestLeave(() => {
+        requestLeave?.(() => {
           if (replace) {
             router.replace(href, { scroll });
           } else {

@@ -5,13 +5,13 @@ import { SkipLink } from "@/components/public/layout/skip-link";
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="relative isolate flex min-h-screen flex-col bg-background">
       <SkipLink />
       <PublicHeader />
       <main
         id="content"
         tabIndex={-1}
-        className="flex-1 py-10 outline-none sm:py-12"
+        className="flex-1 py-10 outline-none"
       >
         {children}
       </main>
