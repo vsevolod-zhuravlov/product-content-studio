@@ -33,11 +33,7 @@ export function PasswordInput({
         aria-pressed={isVisible}
         onClick={() => setIsVisible((visible) => !visible)}
       >
-        {isVisible ? (
-          <EyeOff aria-hidden="true" />
-        ) : (
-          <Eye aria-hidden="true" />
-        )}
+        {isVisible ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
       </Button>
     </div>
   );

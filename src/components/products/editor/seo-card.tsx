@@ -4,12 +4,7 @@ import { Search } from "lucide-react";
 import { SerpPreview } from "@/components/products/editor/serp-preview";
 import { TextAreaField } from "@/components/products/editor/text-area-field";
 import { TextField } from "@/components/products/editor/text-field";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PRODUCT_LIMITS } from "@/lib/validation/product";
 
 type SeoCardProps = {

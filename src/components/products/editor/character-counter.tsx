@@ -10,7 +10,8 @@ type CharacterCounterProps = {
 export function CharacterCounter({ id, value, limit }: CharacterCounterProps) {
   const state = getCharacterCountState(value, limit);
   const percent = Math.min(100, limit === 0 ? 0 : (state.count / limit) * 100);
-  const isWarning = !state.isEmpty && !state.isOverLimit && state.count / limit >= 0.8;
+  const isWarning =
+    !state.isEmpty && !state.isOverLimit && state.count / limit >= 0.8;
 
   return (
     <div id={id} className="space-y-1">

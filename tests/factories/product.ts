@@ -1,8 +1,5 @@
 import { randomUUID } from "node:crypto";
-import {
-  ProductStatus,
-  type Prisma,
-} from "@/generated/prisma/client";
+import { ProductStatus, type Prisma } from "@/generated/prisma/client";
 
 export function buildProduct(
   overrides: Partial<Prisma.ProductCreateInput> = {},

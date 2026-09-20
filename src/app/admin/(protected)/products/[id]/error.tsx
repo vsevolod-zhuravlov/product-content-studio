@@ -8,7 +8,5 @@ export default function ProductEditorError({
   error: Error & { digest?: string };
   retry: () => void;
 }) {
-  return (
-    <ErrorState title="Не вдалося завантажити товар" onRetry={retry} />
-  );
+  return <ErrorState title="Не вдалося завантажити товар" onRetry={retry} />;
 }

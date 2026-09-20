@@ -55,10 +55,15 @@ describe("public product queries", () => {
 
   it("returns null for both a draft slug and an unknown slug", async () => {
     await db.product.create({
-      data: buildProduct({ slug: "private-draft", status: ProductStatus.DRAFT }),
+      data: buildProduct({
+        slug: "private-draft",
+        status: ProductStatus.DRAFT,
+      }),
     });
 
-    await expect(getPublishedProductBySlug("private-draft")).resolves.toBeNull();
+    await expect(
+      getPublishedProductBySlug("private-draft"),
+    ).resolves.toBeNull();
     await expect(getPublishedProductBySlug("missing")).resolves.toBeNull();
   });
 

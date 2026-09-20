@@ -9,7 +9,9 @@ type SpecsListProps = {
 
 export function SpecsList({ specs }: SpecsListProps) {
   if (specs.length === 0) {
-    return <p className="text-sm text-muted-foreground">Характеристики відсутні</p>;
+    return (
+      <p className="text-sm text-muted-foreground">Характеристики відсутні</p>
+    );
   }
 
   return (

@@ -8,11 +8,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
     <div className="relative isolate flex min-h-screen flex-col bg-background">
       <SkipLink />
       <PublicHeader />
-      <main
-        id="content"
-        tabIndex={-1}
-        className="flex-1 py-10 outline-none"
-      >
+      <main id="content" tabIndex={-1} className="flex-1 py-10 outline-none">
         {children}
       </main>
       <PublicFooter />

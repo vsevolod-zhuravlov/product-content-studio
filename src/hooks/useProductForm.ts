@@ -39,9 +39,9 @@ export function useProductForm(product: AdminProduct) {
   const { setIsDirty } = useUnsavedChanges();
   const [savedProduct, setSavedProduct] = useState(product);
   const [banner, setBanner] = useState<FormBannerKind | null>(null);
-  const [outcome, setOutcome] = useState<"none" | "invalid" | "saved" | "failed">(
-    "none",
-  );
+  const [outcome, setOutcome] = useState<
+    "none" | "invalid" | "saved" | "failed"
+  >("none");
   const [savedAt, setSavedAt] = useState<Date | null>(null);
 
   const form = useForm<ProductEditInput>({

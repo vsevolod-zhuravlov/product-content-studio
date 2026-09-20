@@ -25,7 +25,10 @@ export function SaveStatusIndicator({ status }: SaveStatusIndicatorProps) {
       case "saving":
         return (
           <>
-            <LoaderCircle className="size-3.5 animate-spin" aria-hidden="true" />
+            <LoaderCircle
+              className="size-3.5 animate-spin"
+              aria-hidden="true"
+            />
             Збереження…
           </>
         );

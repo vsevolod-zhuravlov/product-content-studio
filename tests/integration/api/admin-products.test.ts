@@ -516,7 +516,9 @@ describe("admin API error and method surface", () => {
   it("sanitizes unexpected service errors", async () => {
     const error = new Error("database password and private stack");
     vi.spyOn(productService, "listAdminProducts").mockRejectedValueOnce(error);
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
 
     const response = await adminCollectionRoute.GET(
       apiRequest("/api/admin/products", {

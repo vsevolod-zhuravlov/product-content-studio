@@ -16,12 +16,7 @@ export function BackLink({ name }: BackLinkProps) {
       >
         <ArrowLeft className="size-5" aria-hidden="true" />
       </Link>
-      <Breadcrumbs
-        items={[
-          { label: "Каталог", href: "/" },
-          { label: name },
-        ]}
-      />
+      <Breadcrumbs items={[{ label: "Каталог", href: "/" }, { label: name }]} />
     </div>
   );
 }

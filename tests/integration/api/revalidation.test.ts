@@ -50,11 +50,7 @@ describe("public page revalidation", () => {
     const product = await db.product.create({ data: buildProduct() });
 
     const unauthorized = await updateAdminProduct(
-      jsonApiRequest(
-        `/api/admin/products/${product.id}`,
-        "PUT",
-        validEdit,
-      ),
+      jsonApiRequest(`/api/admin/products/${product.id}`, "PUT", validEdit),
       context(product.id),
     );
     const invalid = await updateAdminProduct(
@@ -76,11 +72,9 @@ describe("public page revalidation", () => {
       context("missing"),
     );
 
-    expect([
-      unauthorized.status,
-      invalid.status,
-      missing.status,
-    ]).toEqual([401, 400, 404]);
+    expect([unauthorized.status, invalid.status, missing.status]).toEqual([
+      401, 400, 404,
+    ]);
     expect(revalidatePath).not.toHaveBeenCalled();
   });
 });

@@ -3,7 +3,10 @@ import { GuardedLink } from "@/components/common/guarded-link";
 import { StatusBadge } from "@/components/common/status-badge";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { EditorActions } from "@/components/products/editor/editor-actions";
-import { SaveStatusIndicator, type SaveStatus } from "@/components/products/editor/save-status-indicator";
+import {
+  SaveStatusIndicator,
+  type SaveStatus,
+} from "@/components/products/editor/save-status-indicator";
 import type { ProductStatus } from "@/lib/api-types";
 
 type EditorHeaderProps = {

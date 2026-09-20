@@ -68,4 +68,3 @@ describe("shortenDescription", () => {
     expect(shortenDescription(text, DESCRIPTION_EXCERPT_LENGTH)).toBe(text);
   });
 });
-

@@ -1,11 +1,6 @@
 import { Info, Lock } from "lucide-react";
 import { SpecsList } from "@/components/products/editor/specs-list";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { AdminProduct } from "@/lib/api-types";
 
 type ReadOnlyInfoCardProps = {
@@ -27,7 +22,9 @@ export function ReadOnlyInfoCard({ product }: ReadOnlyInfoCardProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <p className="text-xs font-medium text-muted-foreground">Назва товару</p>
+          <p className="text-xs font-medium text-muted-foreground">
+            Назва товару
+          </p>
           <p className="mt-1 text-sm font-medium">{product.name}</p>
         </div>
         <div>

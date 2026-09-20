@@ -32,13 +32,13 @@ Missing, expired, or invalid sessions receive:
 
 ## Endpoints
 
-| Method | Path | Authentication | Success |
-| --- | --- | --- | --- |
-| `GET` | `/api/admin/products` | Admin cookie | `200` admin product summaries |
-| `GET` | `/api/admin/products/:id` | Admin cookie | `200` complete editable product |
-| `PUT` | `/api/admin/products/:id` | Admin cookie | `200` saved product |
-| `GET` | `/api/public/products` | None | `200` published products |
-| `GET` | `/api/public/products/:slug` | None | `200` published product |
+| Method | Path                         | Authentication | Success                         |
+| ------ | ---------------------------- | -------------- | ------------------------------- |
+| `GET`  | `/api/admin/products`        | Admin cookie   | `200` admin product summaries   |
+| `GET`  | `/api/admin/products/:id`    | Admin cookie   | `200` complete editable product |
+| `PUT`  | `/api/admin/products/:id`    | Admin cookie   | `200` saved product             |
+| `GET`  | `/api/public/products`       | None           | `200` published products        |
+| `GET`  | `/api/public/products/:slug` | None           | `200` published product         |
 
 Only the methods shown above are implemented. Next.js returns `405 Method Not
 Allowed` for unsupported methods.
@@ -164,14 +164,14 @@ and invalid slugs all return the identical response:
 
 ## Error statuses
 
-| Status | Meaning |
-| --- | --- |
-| `400` | Invalid update body or malformed JSON |
-| `401` | Missing or invalid admin session |
-| `403` | Cross-origin admin write |
-| `404` | Product unavailable or identifier invalid |
-| `413` | Update body exceeds 16 KiB |
-| `415` | Update content type is not JSON |
-| `500` | Unexpected server error |
+| Status | Meaning                                   |
+| ------ | ----------------------------------------- |
+| `400`  | Invalid update body or malformed JSON     |
+| `401`  | Missing or invalid admin session          |
+| `403`  | Cross-origin admin write                  |
+| `404`  | Product unavailable or identifier invalid |
+| `413`  | Update body exceeds 16 KiB                |
+| `415`  | Update content type is not JSON           |
+| `500`  | Unexpected server error                   |
 
 Unexpected failures return only `{ "error": "Internal server error" }`.

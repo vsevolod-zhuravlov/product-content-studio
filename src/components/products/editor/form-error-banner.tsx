@@ -4,10 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
 export type FormBannerKind =
-  | "validation"
-  | "unauthorized"
-  | "not_found"
-  | "retryable";
+  "validation" | "unauthorized" | "not_found" | "retryable";
 
 type FormErrorBannerProps = {
   kind: FormBannerKind;
@@ -69,7 +66,12 @@ export function FormErrorBanner({
           Не вдалося зберегти. Ваші правки збережено у формі — спробуйте ще раз
         </p>
         {onRetry ? (
-          <Button type="button" variant="outline" className="mt-3 h-10" onClick={onRetry}>
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-3 h-10"
+            onClick={onRetry}
+          >
             Спробувати ще раз
           </Button>
         ) : null}

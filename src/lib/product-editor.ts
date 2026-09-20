@@ -35,9 +35,7 @@ export function getCharacterCountState(
   };
 }
 
-export type ProductFormErrors = Partial<
-  Record<keyof ProductEditInput, string>
->;
+export type ProductFormErrors = Partial<Record<keyof ProductEditInput, string>>;
 
 const EDITABLE_PRODUCT_FIELDS = [
   "description",

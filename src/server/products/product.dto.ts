@@ -7,19 +7,11 @@ import type {
 } from "@/lib/api-types";
 import { specsSchema } from "@/lib/validation/product";
 
-type AdminListSource = Pick<
-  Product,
-  "id" | "name" | "status" | "updatedAt"
->;
+type AdminListSource = Pick<Product, "id" | "name" | "status" | "updatedAt">;
 
 type PublicProductSource = Pick<
   Product,
-  | "slug"
-  | "name"
-  | "specs"
-  | "description"
-  | "seoTitle"
-  | "seoDescription"
+  "slug" | "name" | "specs" | "description" | "seoTitle" | "seoDescription"
 >;
 
 export function toAdminProductListItem(
@@ -47,9 +39,7 @@ export function toAdminProduct(product: Product): AdminProduct {
   };
 }
 
-export function toPublicProduct(
-  product: PublicProductSource,
-): PublicProduct {
+export function toPublicProduct(product: PublicProductSource): PublicProduct {
   return {
     slug: product.slug,
     name: product.name,

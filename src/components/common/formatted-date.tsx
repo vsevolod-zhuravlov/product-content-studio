@@ -34,7 +34,10 @@ export function FormattedDate({
   const isValid = date !== null && !Number.isNaN(date.getTime());
 
   return (
-    <time className={className} dateTime={isValid ? date.toISOString() : undefined}>
+    <time
+      className={className}
+      dateTime={isValid ? date.toISOString() : undefined}
+    >
       {formatDateTime(value, fallback)}
     </time>
   );

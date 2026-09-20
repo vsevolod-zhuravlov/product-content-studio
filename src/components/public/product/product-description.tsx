@@ -1,11 +1,6 @@
 import { AlignLeft } from "lucide-react";
 import { splitDescriptionParagraphs } from "@/lib/product-description";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type ProductDescriptionProps = {
   description: string;

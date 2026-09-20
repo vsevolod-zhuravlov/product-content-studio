@@ -277,9 +277,8 @@ describe("GET /api/admin/me direct guard", () => {
       401,
     );
     expect(
-      (
-        await getMe(withCookie("/api/admin/me", `${header}.${payload}.`))
-      ).status,
+      (await getMe(withCookie("/api/admin/me", `${header}.${payload}.`)))
+        .status,
     ).toBe(401);
   });
 });

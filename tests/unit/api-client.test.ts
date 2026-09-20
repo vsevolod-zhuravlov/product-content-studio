@@ -100,7 +100,9 @@ describe("saveProduct", () => {
       "fetch",
       vi
         .fn<typeof fetch>()
-        .mockResolvedValue(new Response("<html>Failure</html>", { status: 500 })),
+        .mockResolvedValue(
+          new Response("<html>Failure</html>", { status: 500 }),
+        ),
     );
 
     await expect(saveProduct("product-1", input)).resolves.toEqual({

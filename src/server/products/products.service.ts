@@ -1,9 +1,6 @@
 import "server-only";
 import { z } from "zod";
-import {
-  ProductStatus,
-  type Product,
-} from "@/generated/prisma/client";
+import { ProductStatus, type Product } from "@/generated/prisma/client";
 import type { PublicProduct } from "@/lib/api-types";
 import { db } from "@/lib/db";
 import { productEditSchema } from "@/lib/validation/product";
@@ -99,8 +96,7 @@ function toFieldErrors(error: z.ZodError): Record<string, string[]> {
       continue;
     }
 
-    const field =
-      typeof issue.path[0] === "string" ? issue.path[0] : "_root";
+    const field = typeof issue.path[0] === "string" ? issue.path[0] : "_root";
     normalized[field] = [...(normalized[field] ?? []), issue.message];
   }
 

@@ -47,7 +47,9 @@ function readFieldErrors(body: unknown): Record<string, string[]> {
   for (const [field, messages] of Object.entries(body.fieldErrors)) {
     if (
       Array.isArray(messages) &&
-      messages.every((message): message is string => typeof message === "string")
+      messages.every(
+        (message): message is string => typeof message === "string",
+      )
     ) {
       fieldErrors[field] = messages;
     }

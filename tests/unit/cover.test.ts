@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  COVER_COLORS,
-  COVER_GENERATORS,
-  getCoverSpec,
-} from "@/lib/cover";
+import { COVER_COLORS, COVER_GENERATORS, getCoverSpec } from "@/lib/cover";
 import { getCoverBackground } from "@/server/cover";
 
 const SAMPLE_SLUGS = [
@@ -41,7 +37,9 @@ describe("getCoverSpec", () => {
   );
 
   it("spreads different slugs across several colors and generators", () => {
-    const colors = new Set(SAMPLE_SLUGS.map((slug) => getCoverSpec(slug).color));
+    const colors = new Set(
+      SAMPLE_SLUGS.map((slug) => getCoverSpec(slug).color),
+    );
     const generators = new Set(
       SAMPLE_SLUGS.map((slug) => getCoverSpec(slug).generator),
     );

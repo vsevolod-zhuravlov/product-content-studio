@@ -23,10 +23,7 @@ export async function getSessionFromRequest(
 }
 
 export function withAdmin<Context>(handler: AdminHandler<Context>) {
-  return async (
-    request: NextRequest,
-    context?: Context,
-  ): Promise<Response> => {
+  return async (request: NextRequest, context?: Context): Promise<Response> => {
     if (
       request.method !== "GET" &&
       request.method !== "HEAD" &&

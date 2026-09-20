@@ -14,9 +14,7 @@ export function formatProductCount(count: number): string {
   return `${count} ${nouns[productPluralRules.select(count)]}`;
 }
 
-function toValidDate(
-  value: string | Date | null | undefined,
-): Date | null {
+function toValidDate(value: string | Date | null | undefined): Date | null {
   if (value === null || value === undefined || value === "") {
     return null;
   }

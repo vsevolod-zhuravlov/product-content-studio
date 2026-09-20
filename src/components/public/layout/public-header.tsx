@@ -14,9 +14,7 @@ export function PublicHeader() {
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
             <Store className="size-4" aria-hidden="true" />
           </span>
-          <span className="text-xl font-bold tracking-tight">
-            {SITE_NAME}
-          </span>
+          <span className="text-xl font-bold tracking-tight">{SITE_NAME}</span>
         </Link>
       </PublicContainer>
     </header>

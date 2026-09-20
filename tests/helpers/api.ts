@@ -29,7 +29,10 @@ export function apiRequest(
 ): NextRequest {
   const requestHeaders = new Headers(headers);
 
-  if (contentType !== null && (contentType !== undefined || body !== undefined)) {
+  if (
+    contentType !== null &&
+    (contentType !== undefined || body !== undefined)
+  ) {
     requestHeaders.set("content-type", contentType ?? "application/json");
   }
   if (token) {

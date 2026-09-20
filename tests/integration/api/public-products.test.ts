@@ -5,11 +5,7 @@ import * as publicDetailRoute from "@/app/api/public/products/[slug]/route";
 import { ProductStatus } from "@/generated/prisma/client";
 import { db } from "@/lib/db";
 import { buildProduct } from "../../factories/product";
-import {
-  apiRequest,
-  jsonApiRequest,
-  validAdminToken,
-} from "../../helpers/api";
+import { apiRequest, jsonApiRequest, validAdminToken } from "../../helpers/api";
 import { resetDb } from "../../helpers/database";
 
 vi.mock("@/server/revalidate", () => ({
@@ -239,7 +235,9 @@ describe("public product reads", () => {
         "application/json",
       );
       expect(response.headers.get("access-control-allow-origin")).toBeNull();
-      expect(response.headers.get("access-control-allow-credentials")).toBeNull();
+      expect(
+        response.headers.get("access-control-allow-credentials"),
+      ).toBeNull();
     }
   });
 
@@ -319,11 +317,7 @@ describe("status controls public availability across APIs", () => {
       }),
     });
     const updateResponse = await adminDetailRoute.PUT(
-      jsonApiRequest(
-        `/api/admin/products/${draft.id}`,
-        "PUT",
-        edit,
-      ),
+      jsonApiRequest(`/api/admin/products/${draft.id}`, "PUT", edit),
       idContext(draft.id),
     );
     const detailResponse = await publicDetailRoute.GET(

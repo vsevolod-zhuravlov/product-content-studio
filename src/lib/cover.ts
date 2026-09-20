@@ -43,8 +43,7 @@ function hashSlug(slug: string): number {
 export function getCoverSpec(slug: string): CoverSpec {
   const hash = hashSlug(slug);
   const color = COVER_COLORS[(hash >>> 8) % COVER_COLORS.length];
-  const generator =
-    COVER_GENERATORS[(hash >>> 16) % COVER_GENERATORS.length];
+  const generator = COVER_GENERATORS[(hash >>> 16) % COVER_GENERATORS.length];
 
   return { color, generator };
 }

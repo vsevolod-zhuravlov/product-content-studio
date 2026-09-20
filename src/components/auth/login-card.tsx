@@ -1,11 +1,6 @@
 import { Package } from "lucide-react";
 import type { ReactNode } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function LoginCard({ children }: { children: ReactNode }) {
   return (

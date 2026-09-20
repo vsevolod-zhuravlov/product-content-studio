@@ -11,7 +11,9 @@ export function CatalogHeader({ count }: CatalogHeaderProps) {
         <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
           Каталог
         </h1>
-        <p className="mt-2 text-muted-foreground">Тут можна переглянути всі товари</p>
+        <p className="mt-2 text-muted-foreground">
+          Тут можна переглянути всі товари
+        </p>
       </div>
       <p className="w-fit text-sm font-medium text-primary">
         {formatProductCount(count)}

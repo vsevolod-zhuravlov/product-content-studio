@@ -48,9 +48,7 @@ export function TextAreaField({
         className={className}
         disabled={disabled}
         aria-invalid={Boolean(error)}
-        aria-describedby={
-          error ? `${counterId} ${errorId}` : counterId
-        }
+        aria-describedby={error ? `${counterId} ${errorId}` : counterId}
         {...register(name)}
       />
       <CharacterCounter id={counterId} value={value} limit={limit} />

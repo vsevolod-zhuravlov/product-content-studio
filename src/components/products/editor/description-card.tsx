@@ -2,12 +2,7 @@
 
 import { AlignLeft } from "lucide-react";
 import { TextAreaField } from "@/components/products/editor/text-area-field";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PRODUCT_LIMITS } from "@/lib/validation/product";
 
 type DescriptionCardProps = {

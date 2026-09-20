@@ -59,8 +59,7 @@ npm run e2e:install
 npm run test:e2e
 ```
 
-The suite builds a production-like app (`next build` then `next start` on port
-3100) against a dedicated database. Locally it reuses that server if it is
+The suite builds a production-like app (`next build` then `next start` on port 3100) against a dedicated database. Locally it reuses that server if it is
 already up. Admin login uses `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the
 environment (the same placeholders as `.env.example`).
 

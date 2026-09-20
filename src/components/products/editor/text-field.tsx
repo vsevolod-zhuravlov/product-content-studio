@@ -38,13 +38,15 @@ export function TextField({ name, label, limit, disabled }: TextFieldProps) {
         className="h-10 bg-white"
         disabled={disabled}
         aria-invalid={Boolean(error)}
-        aria-describedby={
-          error ? `${counterId} ${errorId}` : counterId
-        }
+        aria-describedby={error ? `${counterId} ${errorId}` : counterId}
         {...register(name)}
       />
       <CharacterCounter id={counterId} value={value} limit={limit} />
-      <p id={errorId} role={error ? "alert" : undefined} className="min-h-5 text-sm text-destructive">
+      <p
+        id={errorId}
+        role={error ? "alert" : undefined}
+        className="min-h-5 text-sm text-destructive"
+      >
         {error}
       </p>
     </div>
