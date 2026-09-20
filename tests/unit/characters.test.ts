@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { countCharacters } from "@/lib/characters";
 import { getCharacterCountState } from "@/lib/product-editor";
-import {
-  PRODUCT_LIMITS,
-  productEditSchema,
-} from "@/lib/validation/product";
+import { PRODUCT_LIMITS, productEditSchema } from "@/lib/validation/product";
 
 const validInput = {
   description: "Опис товару",

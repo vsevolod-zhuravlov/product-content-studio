@@ -31,9 +31,8 @@ describe("public product page", () => {
 
   it("takes the same not-found path for a draft slug and an unknown slug", async () => {
     getPublicProduct.mockResolvedValue(null);
-    const { default: ProductPage } = await import(
-      "@/app/(public)/products/[slug]/page"
-    );
+    const { default: ProductPage } =
+      await import("@/app/(public)/products/[slug]/page");
 
     await expect(
       ProductPage({ params: Promise.resolve({ slug: "hidden-draft" }) }),

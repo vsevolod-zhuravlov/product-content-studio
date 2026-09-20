@@ -30,6 +30,7 @@ const eslintConfig = defineConfig([
     "test-results/**",
     "blob-report/**",
     "e2e/.auth/**",
+    "coverage/**",
   ]),
 ]);
 

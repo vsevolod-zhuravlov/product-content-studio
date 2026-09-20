@@ -25,9 +25,7 @@ function productWith(description: string, seoTitle: string): PublicProduct {
 
 describe("stored XSS rendering", () => {
   it.each(payloads)("escapes %s in the description and metadata", (payload) => {
-    const { container } = render(
-      <ProductDescription description={payload} />,
-    );
+    const { container } = render(<ProductDescription description={payload} />);
 
     expect(container.querySelector("script")).toBeNull();
     expect(container.querySelector("img")).toBeNull();
@@ -36,6 +34,8 @@ describe("stored XSS rendering", () => {
     const metadata = buildProductMetadata(productWith(payload, payload));
     expect(metadata.title).toEqual({ absolute: payload });
     expect(metadata.description).toBe(payload);
-    expect(JSON.stringify(metadata)).toContain(JSON.stringify(payload).slice(1, -1));
+    expect(JSON.stringify(metadata)).toContain(
+      JSON.stringify(payload).slice(1, -1),
+    );
   });
 });

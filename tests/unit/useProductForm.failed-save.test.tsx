@@ -55,9 +55,9 @@ function savedProduct(overrides: Partial<AdminProduct> = {}): AdminProduct {
   };
 }
 
-async function editSeoTitle(
-  result: { current: ReturnType<typeof useProductForm> },
-) {
+async function editSeoTitle(result: {
+  current: ReturnType<typeof useProductForm>;
+}) {
   await act(async () => {
     result.current.form.setValue("seoTitle", editedTitle, {
       shouldDirty: true,
