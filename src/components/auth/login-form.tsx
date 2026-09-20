@@ -1,10 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { PasswordInput } from "@/components/auth/password-input";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { safeRedirectPath } from "@/lib/auth/redirect";
@@ -25,12 +27,14 @@ export function LoginForm({ next }: { next: string | null }) {
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
+    shouldFocusError: true,
   });
 
   const onSubmit = handleSubmit(async (values) => {
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
+        credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
@@ -43,9 +47,14 @@ export function LoginForm({ next }: { next: string | null }) {
       }
 
       if (response.status === 400 && body.fieldErrors) {
+        let shouldFocus = true;
+
         for (const field of ["email", "password"] as const) {
           const message = body.fieldErrors[field]?.[0];
-          if (message) setError(field, { message });
+          if (message) {
+            setError(field, { message }, { shouldFocus });
+            shouldFocus = false;
+          }
         }
         return;
       }
@@ -64,55 +73,64 @@ export function LoginForm({ next }: { next: string | null }) {
   });
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle>Вхід до Product Content Studio</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={onSubmit} noValidate>
-          <fieldset className="space-y-4" disabled={isSubmitting}>
-            <div className="space-y-2">
-              <Label htmlFor="email">Електронна пошта</Label>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                aria-invalid={Boolean(errors.email)}
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="text-sm text-destructive">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
+    <form onSubmit={onSubmit} noValidate>
+      <fieldset className="space-y-5" disabled={isSubmitting}>
+        <div className="space-y-2">
+          <Label htmlFor="email">Електронна пошта</Label>
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "email-error" : undefined}
+            className="h-10 bg-white"
+            {...register("email")}
+          />
+          {errors.email && (
+            <p
+              id="email-error"
+              className="text-sm text-destructive"
+              role="alert"
+            >
+              {errors.email.message}
+            </p>
+          )}
+        </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Пароль</Label>
-              <Input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                aria-invalid={Boolean(errors.password)}
-                {...register("password")}
-              />
-              {errors.password && (
-                <p className="text-sm text-destructive">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
+        <div className="space-y-2">
+          <Label htmlFor="password">Пароль</Label>
+          <PasswordInput
+            id="password"
+            autoComplete="current-password"
+            aria-invalid={Boolean(errors.password)}
+            aria-describedby={errors.password ? "password-error" : undefined}
+            className="h-10 bg-white"
+            {...register("password")}
+          />
+          {errors.password && (
+            <p
+              id="password-error"
+              className="text-sm text-destructive"
+              role="alert"
+            >
+              {errors.password.message}
+            </p>
+          )}
+        </div>
 
-            {errors.root && (
-              <p className="text-sm text-destructive">{errors.root.message}</p>
-            )}
+        {errors.root && (
+          <Alert variant="destructive">
+            <AlertDescription>{errors.root.message}</AlertDescription>
+          </Alert>
+        )}
 
-            <Button className="w-full" type="submit">
-              {isSubmitting ? "Входимо…" : "Увійти"}
-            </Button>
-          </fieldset>
-        </form>
-      </CardContent>
-    </Card>
+        <Button className="h-10 w-full" type="submit">
+          {isSubmitting && (
+            <LoaderCircle className="animate-spin" aria-hidden="true" />
+          )}
+          Увійти
+        </Button>
+      </fieldset>
+    </form>
   );
 }

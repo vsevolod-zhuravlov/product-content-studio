@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { LogoutButton } from "@/components/auth/logout-button";
+import { UnsavedChangesProvider } from "@/components/common/unsaved-changes-provider";
+import { AdminHeader } from "@/components/layout/admin-header";
 import { requireAdminPage } from "@/lib/auth/session";
 
 export default async function ProtectedAdminLayout({
@@ -10,17 +11,11 @@ export default async function ProtectedAdminLayout({
   const session = await requireAdminPage();
 
   return (
-    <div className="min-h-screen bg-muted/30">
-      <header className="border-b bg-background">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
-          <div>
-            <p className="font-semibold">Product Content Studio</p>
-            <p className="text-sm text-muted-foreground">{session.email}</p>
-          </div>
-          <LogoutButton />
-        </div>
-      </header>
-      <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
-    </div>
+    <UnsavedChangesProvider>
+      <div className="min-h-screen">
+        <AdminHeader email={session.email} />
+        <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">{children}</main>
+      </div>
+    </UnsavedChangesProvider>
   );
 }

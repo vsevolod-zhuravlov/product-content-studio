@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  robots: { index: false },
+  robots: { index: false, follow: false },
+  title: {
+    default: "Product Content Studio",
+    template: "%s — Product Content Studio",
+  },
 };
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
