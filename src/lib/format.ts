@@ -14,16 +14,27 @@ export function formatProductCount(count: number): string {
   return `${count} ${nouns[productPluralRules.select(count)]}`;
 }
 
-export function formatDate(
+function toValidDate(
   value: string | Date | null | undefined,
-  fallback = DATE_FALLBACK,
-): string {
+): Date | null {
   if (value === null || value === undefined || value === "") {
-    return fallback;
+    return null;
   }
 
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
+}
+
+export function formatDate(
+  value: string | Date | null | undefined,
+  fallback = DATE_FALLBACK,
+): string {
+  const date = toValidDate(value);
+  if (!date) {
     return fallback;
   }
 
@@ -31,6 +42,25 @@ export function formatDate(
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+  }).format(date);
+}
+
+export function formatDateTime(
+  value: string | Date | null | undefined,
+  fallback = DATE_FALLBACK,
+): string {
+  const date = toValidDate(value);
+  if (!date) {
+    return fallback;
+  }
+
+  return new Intl.DateTimeFormat("uk-UA", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
   }).format(date);
 }
 

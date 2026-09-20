@@ -26,7 +26,7 @@ export function ProductsTableRow({ product }: ProductsTableRowProps) {
       <TableCell className="px-4 py-3">
         <StatusBadge status={product.status} />
       </TableCell>
-      <TableCell className="px-4 py-3 text-muted-foreground">
+      <TableCell className="px-4 py-3 whitespace-nowrap text-muted-foreground">
         <FormattedDate value={product.updatedAt} />
       </TableCell>
       <TableCell className="px-4 py-3 text-right">

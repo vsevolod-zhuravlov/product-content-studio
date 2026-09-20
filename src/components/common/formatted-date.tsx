@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { formatDate } from "@/lib/format";
+import { formatDateTime } from "@/lib/format";
 
 type FormattedDateProps = {
   value: string | Date | null | undefined;
@@ -35,7 +35,7 @@ export function FormattedDate({
 
   return (
     <time className={className} dateTime={isValid ? date.toISOString() : undefined}>
-      {formatDate(value, fallback)}
+      {formatDateTime(value, fallback)}
     </time>
   );
 }

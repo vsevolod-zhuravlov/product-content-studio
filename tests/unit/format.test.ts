@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDate, formatProductCount } from "@/lib/format";
+import { formatDate, formatDateTime, formatProductCount } from "@/lib/format";
 
 describe("formatProductCount", () => {
   it.each([
@@ -24,6 +24,23 @@ describe("formatDate", () => {
     "returns a fallback for %s",
     (value) => {
       expect(formatDate(value)).toBe("—");
+    },
+  );
+});
+
+describe("formatDateTime", () => {
+  it("formats a valid date with time in Ukrainian", () => {
+    const value = new Date(2026, 8, 20, 14, 5);
+    const formatted = formatDateTime(value);
+
+    expect(formatted).toContain("20.09.2026");
+    expect(formatted).toMatch(/14:05/);
+  });
+
+  it.each([null, undefined, "", "not-a-date"])(
+    "returns a fallback for %s",
+    (value) => {
+      expect(formatDateTime(value)).toBe("—");
     },
   );
 });
