@@ -1,8 +1,7 @@
 import type { NextRequest } from "next/server";
+import { isValidPublicProductSlug } from "@/lib/validation/public-slug";
 import { handleServiceError, jsonError, jsonOk } from "@/server/http";
 import * as productService from "@/server/products/products.service";
-
-const VALID_SLUG = /^[a-z0-9-]{1,100}$/;
 
 type ProductRouteContext = {
   params: Promise<{ slug: string }>;
@@ -14,7 +13,7 @@ export async function GET(
 ): Promise<Response> {
   try {
     const { slug } = await context.params;
-    if (!VALID_SLUG.test(slug)) {
+    if (!isValidPublicProductSlug(slug)) {
       return jsonError(404, "Not found");
     }
 
