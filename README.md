@@ -89,3 +89,6 @@ variable is omitted, secure cookies default to enabled only for
   copied token before its expiry.
 - Login rate limiting is not implemented yet.
 - Registration, password reset, and roles are outside the current scope.
+- Character limits count Unicode code points (`Array.from(value).length`), not
+  grapheme clusters. A combining sequence such as `e` + combining acute counts
+  as two characters.

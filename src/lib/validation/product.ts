@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { countCharacters } from "@/lib/characters";
 
 export const PRODUCT_LIMITS = {
   description: 1000,
@@ -11,7 +12,9 @@ function editableText(maximum: number) {
     .string()
     .trim()
     .min(1, { error: "Обов'язкове поле" })
-    .max(maximum, { error: `Максимум ${maximum} символів` });
+    .refine((value) => countCharacters(value) <= maximum, {
+      error: `Максимум ${maximum} символів`,
+    });
 }
 
 export const productEditSchema = z.strictObject({

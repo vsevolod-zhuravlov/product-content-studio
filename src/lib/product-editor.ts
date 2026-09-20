@@ -1,4 +1,5 @@
 import type { AdminProduct } from "@/lib/api-types";
+import { countCharacters } from "@/lib/characters";
 import type { ProductEditInput } from "@/lib/validation/product";
 
 export function toProductEditValues(product: AdminProduct): ProductEditInput {
@@ -23,7 +24,7 @@ export function getCharacterCountState(
   value: string,
   limit: number,
 ): CharacterCountState {
-  const count = value.trim().length;
+  const count = countCharacters(value.trim());
 
   return {
     count,

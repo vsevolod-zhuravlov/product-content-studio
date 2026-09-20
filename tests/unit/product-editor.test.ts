@@ -44,8 +44,17 @@ describe("getCharacterCountState", () => {
     });
   });
 
-  it("measures trim().length", () => {
+  it("measures trimmed Unicode code points", () => {
     expect(getCharacterCountState("  текст \n", 5).count).toBe(5);
+    expect(getCharacterCountState("😀".repeat(60), 60)).toMatchObject({
+      count: 60,
+      isAtLimit: true,
+      isOverLimit: false,
+    });
+    expect(getCharacterCountState("e\u0301", 1)).toMatchObject({
+      count: 2,
+      isOverLimit: true,
+    });
   });
 });
 

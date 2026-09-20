@@ -131,7 +131,7 @@ describe("productEditSchema", () => {
     },
   );
 
-  it("counts Cyrillic text using String.length", () => {
+  it("counts Cyrillic text using Unicode code points", () => {
     const atLimit = "ї".repeat(60);
 
     expect(
