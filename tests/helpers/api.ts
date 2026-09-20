@@ -66,6 +66,27 @@ export async function validAdminToken(): Promise<string> {
   return signSession({ sub: "admin-1", email: "admin@example.com" });
 }
 
+export async function invokeRoute(
+  routeModule: Record<string, unknown>,
+  request: NextRequest,
+  context?: unknown,
+): Promise<Response> {
+  const handler = routeModule[request.method];
+  if (typeof handler !== "function") {
+    return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
+      status: 405,
+      headers: { "content-type": "application/json" },
+    });
+  }
+
+  return (
+    handler as (
+      request: NextRequest,
+      context?: unknown,
+    ) => Response | Promise<Response>
+  )(request, context);
+}
+
 export async function invalidAdminTokens(): Promise<
   Array<[name: string, token: string | undefined]>
 > {

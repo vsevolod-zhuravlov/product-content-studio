@@ -10,6 +10,7 @@ import {
   API_BASE_URL,
   apiRequest,
   invalidAdminTokens,
+  invokeRoute,
   jsonApiRequest,
   validAdminToken,
 } from "../../helpers/api";
@@ -538,6 +539,27 @@ describe("admin API error and method surface", () => {
     expect(Object.keys(adminCollectionRoute).sort()).toEqual(["GET"]);
     expect(Object.keys(adminDetailRoute).sort()).toEqual(["GET", "PUT"]);
   });
+
+  it.each(["POST", "DELETE", "PATCH"] as const)(
+    "returns 405 for authenticated %s on collection and detail",
+    async (method) => {
+      const token = await validAdminToken();
+      const collection = await invokeRoute(
+        adminCollectionRoute,
+        apiRequest("/api/admin/products", { method, token }),
+      );
+      const detail = await invokeRoute(
+        adminDetailRoute,
+        apiRequest("/api/admin/products/product-id", { method, token }),
+        detailContext("product-id"),
+      );
+
+      expect(collection.status).toBe(405);
+      expect(detail.status).toBe(405);
+      expect(await collection.json()).toEqual({ error: "Method Not Allowed" });
+      expect(await detail.json()).toEqual({ error: "Method Not Allowed" });
+    },
+  );
 
   it("uses no-store for protocol errors too", async () => {
     const response = await adminDetailRoute.PUT(

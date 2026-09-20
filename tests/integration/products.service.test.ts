@@ -9,6 +9,7 @@ import {
   listPublishedProducts,
   updateProduct,
 } from "@/server/products/products.service";
+import { getPublicProduct } from "@/server/products/get-public-product";
 import { buildProduct } from "../factories/product";
 import { resetDb } from "../helpers/database";
 
@@ -65,6 +66,30 @@ describe("public product queries", () => {
       getPublishedProductBySlug("private-draft"),
     ).resolves.toBeNull();
     await expect(getPublishedProductBySlug("missing")).resolves.toBeNull();
+  });
+
+  it("uses the same not-found path for a draft slug and an unknown slug", async () => {
+    await db.product.create({
+      data: buildProduct({
+        slug: "hidden-draft",
+        status: ProductStatus.DRAFT,
+      }),
+    });
+    await db.product.create({
+      data: buildProduct({
+        slug: "visible-product",
+        status: ProductStatus.PUBLISHED,
+      }),
+    });
+
+    const draft = await getPublicProduct("hidden-draft");
+    const unknown = await getPublicProduct("does-not-exist");
+    const published = await getPublicProduct("visible-product");
+
+    expect(draft).toBeNull();
+    expect(unknown).toBeNull();
+    expect(published).not.toBeNull();
+    expect(published?.slug).toBe("visible-product");
   });
 
   it("returns a public DTO with exactly the allowed keys", async () => {
