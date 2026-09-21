@@ -2,12 +2,12 @@
 
 ## 1. Tools and models
 
-| Tool | Models | What I used it for |
-|---|---|---|
-| Cursor IDE (Agent mode, chat, Tab) | GPT-5.6 Sol | Writing the automated tests and running audits of the repository |
-| Cursor IDE | Composer 2.5, Cursor Grok 4.6 | Lighter tasks and quick edits (scaffolding, small fixes, styling, documentation tweaks) |
-| Claude (chat, and inside Cursor for the audit-fix pass) | Claude Sonnet 5 | Planning and architecture discussion, writing the step-by-step prompts for the Cursor agents, reviewing agent output and design screenshots against the task requirements, applying the audit fixes together with Cursor Grok |
-| Google Stitch | Gemini Flash (used by Stitch) | Source of design ideas only (see section 5) |
+| Tool                                                    | Models                        | What I used it for                                                                                                                                                                                                            |
+| ------------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cursor IDE (Agent mode, chat, Tab)                      | GPT-5.6 Sol                   | Writing the automated tests and running audits of the repository                                                                                                                                                              |
+| Cursor IDE                                              | Composer 2.5, Cursor Grok 4.6 | Lighter tasks and quick edits (scaffolding, small fixes, styling, documentation tweaks)                                                                                                                                       |
+| Claude (chat, and inside Cursor for the audit-fix pass) | Claude Sonnet 5               | Planning and architecture discussion, writing the step-by-step prompts for the Cursor agents, reviewing agent output and design screenshots against the task requirements, applying the audit fixes together with Cursor Grok |
+| Google Stitch                                           | Gemini Flash (used by Stitch) | Source of design ideas only (see section 5)                                                                                                                                                                                   |
 
 ## 2. How I worked
 
@@ -19,14 +19,14 @@
 
 ## 3. AI contribution vs. my contribution
 
-| Area | AI | Me |
-|---|---|---|
-| Stack and architecture | Options and trade-offs in chat | Chose and justified them (Next.js Route Handlers, JWT cookie, Zod, Prisma/PostgreSQL, npm, Vitest + Playwright) |
-| Code | Wrote most of the implementation and the first drafts of the tests | Defined scope, security rules and acceptance checks per step; reviewed and corrected the output |
-| Security-sensitive parts (auth, validation, draft visibility, XSS) | Implemented to my written rules | Specified the rules (server-side validation, guards inside every admin handler, drafts return 404, plain-text rendering) and verified them by hand and with tests |
-| Design | Stitch produced draft screens | Judged them against the brief, kept the useful ideas and rewrote the rest in my prompts (section 5) |
-| Tests | Drafted unit, integration and e2e tests | Required tests first and mutation checks, judged the quality of the tests, ran the mutations myself (Examples 1–3) |
-| Documentation | Drafts | README results and this log are based on commands I actually ran |
+| Area                                                               | AI                                                                 | Me                                                                                                                                                                |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stack and architecture                                             | Options and trade-offs in chat                                     | Chose and justified them (Next.js Route Handlers, JWT cookie, Zod, Prisma/PostgreSQL, npm, Vitest + Playwright)                                                   |
+| Code                                                               | Wrote most of the implementation and the first drafts of the tests | Defined scope, security rules and acceptance checks per step; reviewed and corrected the output                                                                   |
+| Security-sensitive parts (auth, validation, draft visibility, XSS) | Implemented to my written rules                                    | Specified the rules (server-side validation, guards inside every admin handler, drafts return 404, plain-text rendering) and verified them by hand and with tests |
+| Design                                                             | Stitch produced draft screens                                      | Judged them against the brief, kept the useful ideas and rewrote the rest in my prompts (section 5)                                                               |
+| Tests                                                              | Drafted unit, integration and e2e tests                            | Required tests first and mutation checks, judged the quality of the tests, ran the mutations myself (Examples 1–3)                                                |
+| Documentation                                                      | Drafts                                                             | README results and this log are based on commands I actually ran                                                                                                  |
 
 ## 4. Decisions about AI-generated code
 
@@ -37,6 +37,7 @@
 **What I decided.** Count Unicode code points everywhere. The counter and the Zod schema now share one `countCharacters` helper (`Array.from(value).length`), commit [`e937966`](https://github.com/vsevolod-zhuravlov/product-content-studio/commit/e937966). I deliberately did not count grapheme clusters; the README lists this as a known limitation (a ZWJ emoji sequence counts as several characters).
 
 **How I verified it.**
+
 - CI caught the consequence: E11 still expected the old behavior (`60 / 60` and `61 / 60`) while the fixed counter showed `59 / 60` and `60 / 60`. The app was right and the test was stale, so I rewrote E11 as a regression test with the boundary at 60 / 61 code points (59 letters + 😀 is saved, 60 letters + 😀 is blocked, and no PUT request is sent).
 - The same boundary is tested against the API (`tests/integration/api/admin-products.test.ts`: 200 for 60 code points, 400 for 61, database unchanged; each test asserts its own premise, e.g. `expect(seoTitle.length).toBe(61)`) and in a unit test that compares the counter and the schema on ASCII, Cyrillic, emoji and combining sequences at every field limit (`tests/unit/characters.test.ts`).
 - Mutations, both reverted afterwards: the counter switched back to UTF-16 makes E11 fail (`61 / 60` instead of `60 / 60`); the schema switched back to `value.length` makes the API accept test fail (400 instead of 200).
@@ -61,12 +62,12 @@
 
 ### Smaller corrections of AI output
 
-| AI output | What was wrong | Fix |
-|---|---|---|
+| AI output                                                               | What was wrong                                                                   | Fix                                                                                                                                                |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `import { cn } from "cn"` in `button.tsx` plus a stray `cn` npm package | Wrong import (the shadcn helper lives in `@/lib/utils`) and a useless dependency | Unified the imports and moved shadcn to devDependencies ([`667086f`](https://github.com/vsevolod-zhuravlov/product-content-studio/commit/667086f)) |
-| Screenshot artifacts (`.tmp-screens`) committed by an agent | Build artifacts in git | Stopped tracking them ([`183af7a`](https://github.com/vsevolod-zhuravlov/product-content-studio/commit/183af7a)) |
-| `tsc` ran before Next.js generated its route types | Typecheck failed on a clean clone | Generate route types before `tsc` ([`d9aeed7`](https://github.com/vsevolod-zhuravlov/product-content-studio/commit/d9aeed7)) |
-| README setup steps in the wrong order | A clean clone did not start | Fixed the order and the ports ([`5017e97`](https://github.com/vsevolod-zhuravlov/product-content-studio/commit/5017e97)) |
+| Screenshot artifacts (`.tmp-screens`) committed by an agent             | Build artifacts in git                                                           | Stopped tracking them ([`183af7a`](https://github.com/vsevolod-zhuravlov/product-content-studio/commit/183af7a))                                   |
+| `tsc` ran before Next.js generated its route types                      | Typecheck failed on a clean clone                                                | Generate route types before `tsc` ([`d9aeed7`](https://github.com/vsevolod-zhuravlov/product-content-studio/commit/d9aeed7))                       |
+| README setup steps in the wrong order                                   | A clean clone did not start                                                      | Fixed the order and the ports ([`5017e97`](https://github.com/vsevolod-zhuravlov/product-content-studio/commit/5017e97))                           |
 
 ## 5. Design tools (bonus)
 

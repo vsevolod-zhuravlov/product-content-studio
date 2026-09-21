@@ -101,20 +101,20 @@ automatically. `docker compose` reads `POSTGRES_PORT` from `.env`, and
 
 ### Scripts
 
-| Script                  | What it does                                            |
-| ----------------------- | ------------------------------------------------------- |
-| `npm run dev`           | Development server                                      |
-| `npm run build`         | Production build                                        |
-| `npm start`             | Run the production build                                |
-| `npm run db:deploy`     | Apply Prisma migrations                                 |
-| `npm run db:seed`       | Seed the admin user and products                        |
-| `npm test`              | Unit + integration tests (no Playwright)                |
-| `npm run test:coverage` | Same tests with coverage                                |
-| `npm run e2e:install`   | Install the Playwright browser (Chromium)               |
-| `npm run test:e2e`      | Playwright end-to-end tests                             |
-| `npm run lint`          | ESLint (`--max-warnings 0`)                             |
-| `npm run format:check`  | Prettier check                                          |
-| `npm run typecheck`     | `next typegen` + `tsc`                                  |
+| Script                  | What it does                              |
+| ----------------------- | ----------------------------------------- |
+| `npm run dev`           | Development server                        |
+| `npm run build`         | Production build                          |
+| `npm start`             | Run the production build                  |
+| `npm run db:deploy`     | Apply Prisma migrations                   |
+| `npm run db:seed`       | Seed the admin user and products          |
+| `npm test`              | Unit + integration tests (no Playwright)  |
+| `npm run test:coverage` | Same tests with coverage                  |
+| `npm run e2e:install`   | Install the Playwright browser (Chromium) |
+| `npm run test:e2e`      | Playwright end-to-end tests               |
+| `npm run lint`          | ESLint (`--max-warnings 0`)               |
+| `npm run format:check`  | Prettier check                            |
+| `npm run typecheck`     | `next typegen` + `tsc`                    |
 
 ## Technical decisions
 
@@ -195,8 +195,7 @@ matrices, bcrypt and JWT internals stay in Vitest.
 Chromium is the only browser. Cookie, redirect, cache and layout checks here do
 not need Firefox or WebKit.
 
-The suite builds a production-like app (`next build` then `next start` on port
-3100) against a dedicated database. Locally it reuses that server if it is
+The suite builds a production-like app (`next build` then `next start` on port 3100) against a dedicated database. Locally it reuses that server if it is
 already up. Admin login uses `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the
 environment (the same placeholders as `.env.example`).
 
@@ -278,7 +277,6 @@ mostly untested by unit tests. Logic files are high. Per-file (2026-09-20 run):
 ## Time spent and unfinished parts
 
 **Time spent:** about 8 hours in total. The core part (implementation of the admin panel, public pages and API, with unit and integration tests) took 4–6 hours, within the 6–8 hour guideline. The remaining time went to the Playwright e2e tests, the CI workflow, the audit-fix pass and UI polish.
-
 
 **Unfinished or not done:**
 
