@@ -8,6 +8,7 @@ PostgreSQL, Zod, JWT cookie auth.
 - Node.js **24** (see `.nvmrc` and `package.json` `engines.node`; this repo was
   run on v24.14.0)
 - npm
+- PostgreSQL **16** (recommended; Compose uses `postgres:16-alpine`)
 - Docker (for the Compose PostgreSQL service)
 
 ## Run from a clean clone
