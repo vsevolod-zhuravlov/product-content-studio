@@ -28,9 +28,13 @@ const samples = [
 
 describe("countCharacters", () => {
   it("counts ASCII, Cyrillic, emoji, and combining sequences as code points", () => {
+    expect(countCharacters("")).toBe(0);
+    expect(countCharacters("abc")).toBe(3);
     expect(countCharacters("Hello")).toBe(5);
     expect(countCharacters("ї")).toBe(1);
     expect(countCharacters("😀")).toBe(1);
+    expect(countCharacters("a😀")).toBe(2);
+    expect(countCharacters("a".repeat(60))).toBe(60);
     expect(countCharacters("😀".repeat(60))).toBe(60);
     expect(countCharacters(combining)).toBe(2);
     expect("😀".repeat(60).length).toBe(120);

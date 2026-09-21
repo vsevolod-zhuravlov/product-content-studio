@@ -267,6 +267,50 @@ describe("admin product updates", () => {
     ).resolves.toMatchObject(boundaryEdit);
   });
 
+  it("accepts seoTitle at the code-point limit with an emoji", async () => {
+    const product = await db.product.create({ data: buildProduct() });
+    const seoTitle = `${"а".repeat(59)}😀`;
+    const response = await adminDetailRoute.PUT(
+      jsonApiRequest(
+        `/api/admin/products/${product.id}`,
+        "PUT",
+        { ...validEdit, seoTitle },
+        await validAdminToken(),
+      ),
+      detailContext(product.id),
+    );
+
+    expect(seoTitle.length).toBe(61);
+    expect(response.status).toBe(200);
+    await expect(
+      db.product.findUniqueOrThrow({ where: { id: product.id } }),
+    ).resolves.toMatchObject({ seoTitle });
+  });
+
+  it("rejects seoTitle one code point over the limit with an emoji", async () => {
+    const product = await db.product.create({ data: buildProduct() });
+    const seoTitle = `${"а".repeat(60)}😀`;
+    const response = await adminDetailRoute.PUT(
+      jsonApiRequest(
+        `/api/admin/products/${product.id}`,
+        "PUT",
+        { ...validEdit, seoTitle },
+        await validAdminToken(),
+      ),
+      detailContext(product.id),
+    );
+    const body = await response.json();
+
+    expect(seoTitle.length).toBe(62);
+    expect(response.status).toBe(400);
+    expect(body).toMatchObject({
+      error: "Validation failed",
+      fieldErrors: { seoTitle: expect.any(Array) },
+    });
+    expect(body.fieldErrors.seoTitle[0]).toBe("Максимум 60 символів");
+    await expectUnchanged(product);
+  });
+
   it("trims editable text before saving", async () => {
     const product = await db.product.create({ data: buildProduct() });
     const response = await adminDetailRoute.PUT(

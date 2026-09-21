@@ -406,63 +406,62 @@ test.describe("Admin editor", () => {
     );
   });
 
-  test("E11: characterization — emoji length at the SEO title boundary", async ({
+  test("E11: emoji counts as one character (Unicode code points) at the SEO title boundary", async ({
     page,
-    request,
     publishedProduct,
   }) => {
+    // 😀 is one Unicode code point but two UTF-16 code units (.length === 2).
     const emoji = "😀";
-    const emojiUnits = emoji.length;
     const limit = FIELD_LIMITS.seoTitle;
-    const atLimit = `${"а".repeat(limit - emojiUnits)}${emoji}`;
-    const overLimit = `${"а".repeat(limit - emojiUnits + 1)}${emoji}`;
+    const atLimit = `${"а".repeat(limit - 1)}${emoji}`;
+    const overLimit = `${"а".repeat(limit)}${emoji}`;
 
     await openEditor(page, publishedProduct);
-    await fillControl(field(page, ui.seoTitle), atLimit);
-    const clientCountAtLimit = await fieldCounter(page, "seoTitle").innerText();
 
+    // Case A — exactly at the code-point limit (60 code points, 61 UTF-16 units).
+    await fillControl(field(page, ui.seoTitle), atLimit);
+    await expect(fieldCounter(page, "seoTitle")).toHaveText(
+      ui.counter(limit, limit),
+    );
+    await expect(fieldError(page, "seoTitle")).toHaveText("");
+    await expect(saveButton(page)).toBeEnabled();
+
+    const saveResponsePromise = page.waitForResponse(
+      (response) =>
+        response.request().method() === "PUT" &&
+        response.url().includes(`/api/admin/products/${publishedProduct.id}`),
+    );
     await clickSave(page);
+    const saveResponse = await saveResponsePromise;
+    expect(saveResponse.status()).toBe(200);
     await expectSavedToast(page);
 
-    const saved = await getProductById(publishedProduct.id);
-    const serverAcceptsJsLength = saved.seoTitle === atLimit;
+    await page.reload();
+    await expect(field(page, ui.seoTitle)).toHaveValue(atLimit);
+    await expect
+      .poll(async () => (await getProductById(publishedProduct.id)).seoTitle)
+      .toBe(atLimit);
 
+    // Case B — one code point over the limit (61 code points, 62 UTF-16 units).
     await fillControl(field(page, ui.seoTitle), overLimit);
-    const clientCountOver = await fieldCounter(page, "seoTitle").innerText();
+    await expect(fieldCounter(page, "seoTitle")).toHaveText(
+      ui.counter(limit + 1, limit),
+    );
+    await expect(fieldError(page, "seoTitle")).toHaveText(ui.maxLength(limit));
+
     const puts = listenForPuts(page);
     await clickSave(page);
-    const clientBlockedOver = puts.count() === 0;
+    await expect(fieldError(page, "seoTitle")).toHaveText(ui.maxLength(limit));
+    expect(puts.count()).toBe(0);
     puts.detach();
 
-    const apiResponse = await request.put(
-      `/api/admin/products/${publishedProduct.id}`,
-      {
-        data: {
-          description: publishedProduct.description,
-          seoTitle: overLimit,
-          seoDescription: publishedProduct.seoDescription,
-          status: publishedProduct.status,
-        },
-      },
-    );
+    await page.reload();
+    await expect(field(page, ui.seoTitle)).toHaveValue(atLimit);
+    expect((await getProductById(publishedProduct.id)).seoTitle).toBe(atLimit);
 
-    expect(
-      {
-        emojiUtf16Units: emojiUnits,
-        clientCounterAtLimit: clientCountAtLimit,
-        clientCounterOverLimit: clientCountOver,
-        serverSavedAtLimit: serverAcceptsJsLength,
-        clientBlockedOverLimit: clientBlockedOver,
-        apiStatusOverLimit: apiResponse.status(),
-      },
-      "Characterization: the visible counter uses JS string.length (UTF-16). Zod 4 .max() accepts 59 letters + 😀 (60 Unicode code points, 61 UTF-16 units), so the client still submits and the server saves even though the counter shows 61 / 60.",
-    ).toEqual({
-      emojiUtf16Units: 2,
-      clientCounterAtLimit: ui.counter(limit, limit),
-      clientCounterOverLimit: ui.counter(limit + 1, limit),
-      serverSavedAtLimit: true,
-      clientBlockedOverLimit: false,
-      apiStatusOverLimit: 200,
-    });
+    // Case C (server rule with emoji) lives in
+    // tests/integration/api/admin-products.test.ts
+    // ("accepts seoTitle at the code-point limit with an emoji" /
+    //  "rejects seoTitle one code point over the limit with an emoji").
   });
 });

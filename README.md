@@ -182,7 +182,7 @@ mostly untested. Logic files are high. Per-file **statements** (same run):
 - Concurrent edits are last-write-wins; there is no optimistic-lock version.
 - Character limits count Unicode code points (`Array.from(value).length`), not
   grapheme clusters. A combining sequence such as `e` + combining acute counts
-  as two characters.
+  as two characters; a ZWJ emoji sequence counts as several characters.
 - `npm audit` reports high-severity advisories in the Prisma CLI dependency
   tree (`mysql2`; `npm audit fix --force` would install Prisma 6, a major
   downgrade). Left as is. `geopattern` also depends on a moderate `extend`
